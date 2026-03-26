@@ -14,14 +14,14 @@ async def generate_answer_gemini(
 ) -> str | AsyncGenerator[str, None]:
     """Generate answer using Google Gemini API (FREE tier).
 
-    Model: gemini-1.5-flash
+    Model: gemini-2.0-flash
     Free tier: 15 requests/minute
     """
     import google.generativeai as genai
 
     settings = get_settings()
     genai.configure(api_key=settings.google_api_key)
-    model = genai.GenerativeModel("gemini-1.5-flash")
+    model = genai.GenerativeModel("gemini-2.0-flash")
 
     context = "\n\n---\n\n".join([
         f"[Source: {chunk['source']}, Page: {chunk.get('page', 'N/A')}]\n{chunk['text']}"
