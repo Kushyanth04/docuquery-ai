@@ -272,30 +272,28 @@ docker-compose up --build
 
 ---
 
-## 🌐 Deployment
+## 🚀 Deployment Guide
 
-### Backend → Render
+### Frontend (Vercel)
+Deploying the React frontend to Vercel is incredibly simple:
+1. Push your code to GitHub.
+2. Go to [Vercel](https://vercel.com/) and click **Add New Project**.
+3. Import your `docuquery-ai` repository.
+4. Set the **Framework Preset** to `Vite`.
+5. Set the **Root Directory** to `frontend`.
+6. Add the environment variable: `VITE_API_URL` (pointing to your deployed backend URL).
+7. Click **Deploy**.
 
-1. Create a new **Web Service** on [Render](https://render.com)
-2. Connect your GitHub repo
-3. Set **Root Directory** to `backend`
-4. Set **Build Command**: `pip install -r requirements.txt`
-5. Set **Start Command**: `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
-6. Add all environment variables from `.env.example`
-
-### Frontend → Vercel
-
-1. Import project on [Vercel](https://vercel.com)
-2. Set **Root Directory** to `frontend`
-3. Set **Framework Preset** to Vite
-4. Add environment variables (`VITE_API_URL` = your Render URL)
-
----
-
-## 📸 Screenshots
-
-*Screenshots will be added once the application is deployed.*
+### Backend (Render / Railway)
+To deploy the FastAPI backend:
+1. Sign up for [Render](https://render.com/) and create a **Web Service**.
+2. Connect your GitHub repository.
+3. Set the **Root Directory** to `backend`.
+4. Set the **Build Command** to: `pip install -r requirements.txt`
+5. Set the **Start Command** to: `uvicorn app.main:app --host 0.0.0.0 --port 10000`
+6. Add all your `.env` variables from the backend (Supabase, Pinecone, Groq) to Render's Environment Variables section.
+7. Deploy!
 
 ---
 
-*Made with ❤️ by Kushyanth C* — feel free to use this project for learning and portfolio purposes.
+*Made with ❤️ by Kushyanth C* - feel free to use this project for learning and portfolio purposes.
