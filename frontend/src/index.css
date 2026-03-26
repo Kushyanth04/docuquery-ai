@@ -42,7 +42,7 @@ body {
     background: rgba(30, 41, 59, 0.7);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(99, 102, 241, 0.15);
+    border: 1px solid rgba(249, 115, 22, 0.15);
   }
 
   .glass-card {
@@ -55,8 +55,8 @@ body {
   }
 
   .glass-card:hover {
-    border-color: rgba(99, 102, 241, 0.3);
-    box-shadow: 0 8px 32px rgba(99, 102, 241, 0.1);
+    border-color: rgba(249, 115, 22, 0.3);
+    box-shadow: 0 8px 32px rgba(249, 115, 22, 0.1);
   }
 
   .btn-primary {
@@ -80,7 +80,7 @@ body {
   }
 
   .gradient-text {
-    @apply bg-gradient-to-r from-primary-400 via-purple-400 to-pink-400 
+    @apply bg-gradient-to-r from-orange-400 via-amber-400 to-yellow-400 
            bg-clip-text text-transparent;
   }
 
@@ -94,7 +94,7 @@ body {
     position: absolute;
     inset: -1px;
     border-radius: inherit;
-    background: linear-gradient(135deg, #6366f1, #8b5cf6, #a855f7);
+    background: linear-gradient(135deg, #f97316, #ea580c, #f59e0b);
     opacity: 0.3;
     z-index: -1;
     transition: opacity 0.3s ease;
@@ -132,7 +132,7 @@ body {
 
 /* ===== Chat Bubbles ===== */
 .chat-bubble-user {
-  background: linear-gradient(135deg, #4f46e5, #6366f1);
+  background: linear-gradient(135deg, #ea580c, #f97316);
   border-radius: 20px 20px 4px 20px;
 }
 
@@ -144,6 +144,6 @@ body {
 
 /* ===== Drop Zone ===== */
 .dropzone-active {
-  border-color: #6366f1 !important;
-  background: rgba(99, 102, 241, 0.08) !important;
+  border-color: #f97316 !important;
+  background: rgba(249, 115, 22, 0.08) !important;
 }

@@ -108,7 +108,7 @@ export default function DocumentsPage() {
             >
               <div className="flex items-start justify-between">
                 <div className="flex items-start gap-4 flex-1">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary-500/15 to-purple-500/15 
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary-500/15 to-orange-500/15 
                                 border border-primary-500/20 flex items-center justify-center flex-shrink-0">
                     <FileText className="w-6 h-6 text-primary-400" />
                   </div>

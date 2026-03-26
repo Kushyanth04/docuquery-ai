@@ -39,7 +39,7 @@ export default function LoginPage() {
       {/* Background Effects */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-1/4 -left-32 w-96 h-96 bg-primary-600/10 rounded-full blur-3xl animate-pulse-slow" />
-        <div className="absolute bottom-1/4 -right-32 w-96 h-96 bg-purple-600/10 rounded-full blur-3xl animate-pulse-slow" 
+        <div className="absolute bottom-1/4 -right-32 w-96 h-96 bg-orange-600/10 rounded-full blur-3xl animate-pulse-slow" 
              style={{ animationDelay: '1.5s' }} />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] 
                       bg-gradient-radial from-primary-500/5 to-transparent rounded-full" />
@@ -49,7 +49,7 @@ export default function LoginPage() {
         {/* Logo */}
         <div className="text-center mb-8 animate-fade-in">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl 
-                        bg-gradient-to-br from-primary-500 to-purple-600 shadow-2xl shadow-primary-500/30 mb-4">
+                        bg-gradient-to-br from-primary-500 to-orange-600 shadow-2xl shadow-primary-500/30 mb-4">
             <Brain className="w-8 h-8 text-white" />
           </div>
           <h1 className="text-3xl font-bold gradient-text">DocuQuery AI</h1>

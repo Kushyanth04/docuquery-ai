@@ -68,7 +68,7 @@ export default function FileUpload({ onUploadComplete }) {
             </>
           ) : (
             <>
-              <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary-500/20 to-purple-500/20 
+              <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary-500/20 to-orange-500/20 
                             flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                 <Upload className="w-10 h-10 text-primary-400" />
               </div>

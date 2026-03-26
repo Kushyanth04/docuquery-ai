@@ -147,7 +147,7 @@ export default function ChatPage() {
         <div className="flex-1 overflow-y-auto px-6 py-4 space-y-6">
           {messages.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full text-center animate-fade-in">
-              <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-primary-500/15 to-purple-500/15 
+              <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-primary-500/15 to-orange-500/15 
                             border border-primary-500/20 flex items-center justify-center mb-6 animate-float">
                 <Sparkles className="w-10 h-10 text-primary-400" />
               </div>

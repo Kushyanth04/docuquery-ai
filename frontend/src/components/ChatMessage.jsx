@@ -11,7 +11,7 @@ export default function ChatMessage({ message }) {
       {/* Avatar */}
       <div className={`w-9 h-9 rounded-xl flex-shrink-0 flex items-center justify-center
                       ${isUser 
-                        ? 'bg-gradient-to-br from-primary-500 to-purple-600' 
+                        ? 'bg-gradient-to-br from-primary-500 to-orange-600' 
                         : 'bg-gradient-to-br from-emerald-500/20 to-teal-500/20 border border-emerald-500/30'
                       }`}>
         {isUser 

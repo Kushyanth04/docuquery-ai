@@ -15,7 +15,7 @@ export default function UploadPage() {
       icon: Brain,
       title: 'AI-Powered Analysis',
       description: 'Automatic document classification using ML',
-      color: 'from-primary-500/20 to-purple-500/20 border-primary-500/30',
+      color: 'from-primary-500/20 to-orange-500/20 border-primary-500/30',
       iconColor: 'text-primary-400',
     },
     {
@@ -53,7 +53,7 @@ export default function UploadPage() {
       {/* Header */}
       <div className="text-center">
         <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl 
-                      bg-gradient-to-br from-primary-500/20 to-purple-500/20 
+                      bg-gradient-to-br from-primary-500/20 to-orange-500/20 
                       border border-primary-500/30 mb-4">
           <Upload className="w-7 h-7 text-primary-400" />
         </div>
