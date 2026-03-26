@@ -69,11 +69,11 @@ async def ask_question(
     5. Cache the response in Redis (1 hour TTL)
     6. Save Q&A to Supabase chat_history
     """
-    namespace = request.namespace or "general"
+    namespace = request.namespace
 
     try:
         # Step 1: Check Redis cache
-        cache_key_ns = f"{namespace}:{request.document_id or 'all'}"
+        cache_key_ns = f"{namespace or 'all'}:{request.document_id or 'all'}"
         cached = await get_cached_response(request.question, cache_key_ns)
 
         if cached:
@@ -94,17 +94,35 @@ async def ask_question(
         question_embedding = (await get_embeddings([request.question]))[0]
 
         # Step 3: Search Pinecone for similar chunks
-        logger.info(f"Searching Pinecone namespace '{namespace}' for top {request.top_k} matches")
         filter_dict = None
         if request.document_id:
             filter_dict = {"document_id": request.document_id}
 
-        matches = await query_vectors(
-            query_embedding=question_embedding,
-            namespace=namespace,
-            top_k=request.top_k,
-            filter_dict=filter_dict,
-        )
+        matches = []
+        if namespace:
+            # Search specific namespace
+            logger.info(f"Searching Pinecone namespace '{namespace}' for top {request.top_k} matches")
+            matches = await query_vectors(
+                query_embedding=question_embedding,
+                namespace=namespace,
+                top_k=request.top_k,
+                filter_dict=filter_dict,
+            )
+        else:
+            # Search ALL namespaces and merge results
+            all_namespaces = ["general", "technical", "legal", "medical", "financial"]
+            logger.info(f"Searching all Pinecone namespaces for top {request.top_k} matches")
+            for ns in all_namespaces:
+                ns_matches = await query_vectors(
+                    query_embedding=question_embedding,
+                    namespace=ns,
+                    top_k=request.top_k,
+                    filter_dict=filter_dict,
+                )
+                matches.extend(ns_matches)
+            # Sort by score and take top_k
+            matches.sort(key=lambda m: m["score"], reverse=True)
+            matches = matches[:request.top_k]
 
         if not matches:
             return QueryResponse(
@@ -181,11 +199,11 @@ async def ask_question_stream(
 
     Same pipeline as /query but returns answer progressively via SSE.
     """
-    namespace = request.namespace or "general"
+    namespace = request.namespace
 
     try:
         # Check cache first
-        cache_key_ns = f"{namespace}:{request.document_id or 'all'}"
+        cache_key_ns = f"{namespace or 'all'}:{request.document_id or 'all'}"
         cached = await get_cached_response(request.question, cache_key_ns)
 
         if cached:
@@ -202,12 +220,27 @@ async def ask_question_stream(
 
         # Search Pinecone
         filter_dict = {"document_id": request.document_id} if request.document_id else None
-        matches = await query_vectors(
-            query_embedding=question_embedding,
-            namespace=namespace,
-            top_k=request.top_k,
-            filter_dict=filter_dict,
-        )
+
+        matches = []
+        if namespace:
+            matches = await query_vectors(
+                query_embedding=question_embedding,
+                namespace=namespace,
+                top_k=request.top_k,
+                filter_dict=filter_dict,
+            )
+        else:
+            all_namespaces = ["general", "technical", "legal", "medical", "financial"]
+            for ns in all_namespaces:
+                ns_matches = await query_vectors(
+                    query_embedding=question_embedding,
+                    namespace=ns,
+                    top_k=request.top_k,
+                    filter_dict=filter_dict,
+                )
+                matches.extend(ns_matches)
+            matches.sort(key=lambda m: m["score"], reverse=True)
+            matches = matches[:request.top_k]
 
         context_chunks = [
             {
