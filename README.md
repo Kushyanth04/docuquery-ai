@@ -1,26 +1,29 @@
-# 🧠 DocuQuery AI
+# DocuQuery AI
 
-> RAG-powered document Q&A application with intelligent semantic search, automatic document classification, and AI-powered answers with source citations.
+![DocuQuery AI App](https://img.shields.io/badge/Status-Completed-success) ![License](https://img.shields.io/badge/License-MIT-blue) ![Portfolio Project](https://img.shields.io/badge/Project-Portfolio-orange)
 
-[![Python](https://img.shields.io/badge/Python-3.11-3776AB?logo=python&logoColor=white)](https://python.org)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.115-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
-[![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=black)](https://reactjs.org)
-[![LangChain](https://img.shields.io/badge/LangChain-🦜-green)](https://langchain.com)
-[![Pinecone](https://img.shields.io/badge/Pinecone-Vector_DB-000?logo=pinecone)](https://pinecone.io)
+**Made by Kushyanth C © 2026**
 
----
+DocuQuery AI is a full-stack Retrieval-Augmented Generation (RAG) platform that I built to solve a common problem: getting instant answers from large, dense PDF documents without hallucinations.
 
-## ✨ Features
+Instead of reading through 50-page legal contracts, technical manuals, or financial reports, you can upload them to DocuQuery AI and ask questions in plain English. The app retrieves the exact paragraphs from your documents and uses LLMs to generate a concise answer, completely backed by verifiable source citations.
 
-- **RAG Document Q&A** — Upload PDFs and ask questions with AI-generated answers backed by source citations
-- **Dual Embedding Support** — HuggingFace sentence-transformers (free) + OpenAI text-embedding-ada-002 (optional)
-- **Dual LLM Support** — Groq Llama 3.3 (free, default), Google Gemini (free limit), OpenAI GPT-3.5-turbo (paid)
-- **Document Classification** — Auto-categorize PDFs (legal, medical, technical, financial, general) using scikit-learn TF-IDF + Naive Bayes
-- **Smart Retrieval Routing** — Queries routed to relevant Pinecone namespaces by document category
-- **Redis Caching** — Cached responses for repeated queries, reducing API costs and response time by ~60%
-- **Streaming Responses** — Real-time SSE streaming for chat answers
-- **Supabase Auth** — Secure email/password authentication
-- **Beautiful UI** — Glassmorphism design with dark mode, animations, and drag-and-drop uploads
+## 🚀 Why I Built This
+
+I wanted to build a production-grade AI application that goes beyond a simple API wrapper. My goals were to:
+1. **Master RAG Architecture**: Understand how to chunk, embed, and retrieve data effectively.
+2. **Optimize LLM Costs**: Implement intelligent caching (Redis) and free-tier embedding models (HuggingFace) to make AI operations virtually free.
+3. **Build a Full-Stack System**: Connect a modern React frontend with a scalable Python/FastAPI backend, Supabase Auth, and Pinecone vector storage.
+4. **Implement Machine Learning**: Add a custom scikit-learn classifier to automatically categorize documents as they are uploaded.
+
+## ✨ Key Features I Implemented
+
+- **Intelligent RAG Pipeline**: Upload PDFs → Extract text → Chunk → Embed → Pinecone Search → LLM Answer.
+- **Auto-Classification**: I trained a TF-IDF + MultinomialNB model to automatically categorize uploads (legal, medical, technical, financial, general).
+- **Cost-Optimized Backend**: I used Groq's Llama 3.3 70B for lightning-fast, free inference, and HuggingFace for zero-cost embeddings.
+- **Redis Caching**: Automatically caches exact query matches for 1 hour, reducing API calls by ~60% for repeated questions.
+- **Interactive UI with Citations**: A glassmorphism React interface that streams LLM responses (SSE) and shows exact page/text citations.
+- **Secure Auth**: Full JWT authentication using Supabase.
 
 ---
 
@@ -42,7 +45,7 @@
 │                                                                 │
 │  ┌─────────┐  ┌──────────────┐  ┌───────────┐  ┌───────────┐  │
 │  │  Auth   │  │  Documents   │  │   Query   │  │ Classify  │  │
-│  │ Router  │  │   Router     │  │  Router   │  │  Router   │  │
+│  │ Router  │  │   Router     │  │   Router  │  │  Router   │  │
 │  └────┬────┘  └──────┬───────┘  └─────┬─────┘  └─────┬─────┘  │
 │       │              │                │               │         │
 │  ┌────┴──────────────┴────────────────┴───────────────┴────┐   │
@@ -63,22 +66,33 @@
 
 ---
 
-## 🛠️ Tech Stack
+## 🏗️ How I Architected the System
 
-| Layer | Technology | Purpose |
-|-------|-----------|---------|
-| **Backend** | Python, FastAPI | Async REST API server |
-| **PDF Processing** | PyPDF2 | PDF text extraction |
-| **Text Splitting** | LangChain | Recursive character text chunking |
-| **Embeddings** | HuggingFace sentence-transformers | Semantic vector embeddings (free) |
-| **Embeddings (alt)** | OpenAI text-embedding-ada-002 | Premium embeddings (optional) |
-| **LLM** | Groq API (Llama 3.3 70B) | Fast answer generation (free) |
-| **LLM (alt)** | Google Gemini / OpenAI | Alternative LLMs (optional) |
-| **Vector DB** | Pinecone | Similarity search & vector storage |
-| **Classification** | scikit-learn (TF-IDF + MultinomialNB) | Document categorization |
-| **Caching** | Redis | Query response caching |
-| **Auth & DB** | Supabase | Authentication, PostgreSQL, file storage |
-| **Frontend** | React, Tailwind CSS | User interface |
+Building this required connecting several distinct pieces of technology. Here is how the data flows:
+
+1. **Frontend (React)**: The user authenticates via Supabase and uploads a PDF. The frontend sends this as `FormData` to the FastAPI backend.
+2. **Backend Ingestion (Python/FastAPI)**:
+   - `PyPDF2` extracts the text.
+   - My custom `scikit-learn` classifier predicts the document category (e.g., "technical").
+   - `LangChain` splits the text into ~1000-character chunks with overlap.
+   - `SentenceTransformers` (all-MiniLM-L6-v2) converts the chunks into vectors.
+3. **Vector Storage (Pinecone)**: The vectors are bulk-upserted into Pinecone, cleanly separated into namespaces based on the predicted category.
+4. **Query Pipeline**: When a user asks a question, the backend first checks **Redis** for a cached answer. If missed, it embeds the question, queries Pinecone for the Top-5 most similar chunks, and streams those chunks + the question to **Groq**.
+5. **Streaming Response**: The LLM streams its answer back to the frontend via Server-Sent Events (SSE), alongside the exact source paragraphs.
+
+### My Tech Stack
+
+| Component | Technology | Why I Chose It |
+|-----------|------------|----------------|
+| **Frontend** | React + Vite + Tailwind CSS | For a fast, responsive, and visually stunning orange/black glassmorphism UI. |
+| **Backend API** | FastAPI (Python) | High performance, async support for streaming, and native typing validation. |
+| **Auth & DB** | Supabase (PostgreSQL) | Instant JWT authentication and robust relational storage for chat histories. |
+| **Text Processing** | LangChain & PyPDF2 | Essential tools for reliable document chunking and text extraction. |
+| **Embeddings** | HuggingFace (all-MiniLM-L6-v2) | 100% free, local embedding generation. No API costs. |
+| **LLM Inference** | Groq (Llama 3.3 70B) | Lightning fast inference at 800+ tokens/sec, completely free. |
+| **Vector DB** | Pinecone | Serverless, highly scalable vector search separated by category namespaces. |
+| **Machine Learning** | scikit-learn (TF-IDF + NB) | Lightweight, fast document classification without LLM overhead. |
+| **Caching Layer** | Redis Cloud | Drastically reduces latency and API quota usage for repeated queries. |
 | **Deployment** | Docker, Render, Vercel | Containerization & hosting |
 
 ---
@@ -284,12 +298,4 @@ docker-compose up --build
 
 ---
 
-## 📄 License
-
-MIT License — feel free to use this project for learning and portfolio purposes.
-
----
-
-<p align="center">
-  Built with ❤️ using Python, FastAPI, LangChain, Pinecone, and React
-</p>
+*Made with ❤️ by Kushyanth C* — feel free to use this project for learning and portfolio purposes.

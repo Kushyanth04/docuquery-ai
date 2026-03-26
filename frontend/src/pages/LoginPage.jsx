@@ -151,9 +151,14 @@ export default function LoginPage() {
         </div>
 
         {/* Footer */}
-        <p className="text-center text-xs text-dark-600 mt-6">
-          Powered by LangChain, Pinecone, and AI
-        </p>
+        <div className="text-center mt-6">
+          <p className="text-xs text-dark-500 mb-1">
+            Powered by LangChain, Pinecone, and AI
+          </p>
+          <p className="text-xs font-medium text-dark-400">
+            Made by Kushyanth C &copy; 2026
+          </p>
+        </div>
       </div>
     </div>
   )
