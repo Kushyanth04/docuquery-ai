@@ -14,7 +14,7 @@
 
 - **RAG Document Q&A** — Upload PDFs and ask questions with AI-generated answers backed by source citations
 - **Dual Embedding Support** — HuggingFace sentence-transformers (free) + OpenAI text-embedding-ada-002 (optional)
-- **Dual LLM Support** — Google Gemini (free) + OpenAI GPT-3.5-turbo (optional)
+- **Dual LLM Support** — Groq Llama 3.3 (free, default), Google Gemini (free limit), OpenAI GPT-3.5-turbo (paid)
 - **Document Classification** — Auto-categorize PDFs (legal, medical, technical, financial, general) using scikit-learn TF-IDF + Naive Bayes
 - **Smart Retrieval Routing** — Queries routed to relevant Pinecone namespaces by document category
 - **Redis Caching** — Cached responses for repeated queries, reducing API costs and response time by ~60%
@@ -72,8 +72,8 @@
 | **Text Splitting** | LangChain | Recursive character text chunking |
 | **Embeddings** | HuggingFace sentence-transformers | Semantic vector embeddings (free) |
 | **Embeddings (alt)** | OpenAI text-embedding-ada-002 | Premium embeddings (optional) |
-| **LLM** | Google Gemini API | Answer generation (free) |
-| **LLM (alt)** | OpenAI GPT-3.5-turbo | Premium LLM (optional) |
+| **LLM** | Groq API (Llama 3.3 70B) | Fast answer generation (free) |
+| **LLM (alt)** | Google Gemini / OpenAI | Alternative LLMs (optional) |
 | **Vector DB** | Pinecone | Similarity search & vector storage |
 | **Classification** | scikit-learn (TF-IDF + MultinomialNB) | Document categorization |
 | **Caching** | Redis | Query response caching |
@@ -218,7 +218,8 @@ docker-compose up --build
 
 | Variable | Description | Required |
 |----------|-------------|----------|
-| `LLM_PROVIDER` | `gemini` or `openai` | ✅ |
+| `LLM_PROVIDER` | `groq`, `gemini`, or `openai` | ✅ |
+| `GROQ_API_KEY` | Groq API key | If using Groq |
 | `GOOGLE_API_KEY` | Gemini API key | If using Gemini |
 | `OPENAI_API_KEY` | OpenAI API key | If using OpenAI |
 | `EMBEDDING_PROVIDER` | `huggingface` or `openai` | ✅ |

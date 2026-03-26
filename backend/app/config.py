@@ -5,9 +5,10 @@ from functools import lru_cache
 
 class Settings(BaseSettings):
     # LLM Provider
-    llm_provider: str = "gemini"  # "gemini" or "openai"
+    llm_provider: str = "groq"  # "groq", "gemini", or "openai"
     google_api_key: str = ""
     openai_api_key: str = ""
+    groq_api_key: str = ""
 
     # Embedding Provider
     embedding_provider: str = "huggingface"  # "huggingface" or "openai"
