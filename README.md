@@ -1,6 +1,7 @@
 # DocuQuery AI
 
-![DocuQuery AI App](https://img.shields.io/badge/Status-Completed-success) ![License](https://img.shields.io/badge/License-MIT-blue) ![Portfolio Project](https://img.shields.io/badge/Project-Portfolio-orange)
+![DocuQuery AI Login](assets/image.png)
+![DocuQuery AI Chat](assets/2-image.png)
 
 **Made by Kushyanth C © 2026**
 
