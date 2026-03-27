@@ -140,7 +140,7 @@ export default function Sidebar({ onSelectDocument, selectedDocId }) {
       {/* Footer Branding */}
       <div className="p-4 border-t border-dark-700/50 mt-auto">
         <p className="text-[10px] text-center text-dark-500 font-medium">
-          Made by Kushyanth C &copy; 2026
+          Made by Kushyanth B &copy; 2026
         </p>
       </div>
     </div>
