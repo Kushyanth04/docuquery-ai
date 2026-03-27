@@ -76,7 +76,7 @@ Building this required connecting several distinct pieces of technology. Here is
    - `PyPDF2` extracts the text.
    - My custom `scikit-learn` classifier predicts the document category (e.g., "technical").
    - `LangChain` splits the text into ~1000-character chunks with overlap.
-   - `SentenceTransformers` (all-MiniLM-L6-v2) converts the chunks into vectors.
+   - `HuggingFace Inference API` (BAAI/bge-small-en-v1.5) converts the chunks into vectors entirely over the network, minimizing server RAM.
 3. **Vector Storage (Pinecone)**: The vectors are bulk-upserted into Pinecone, cleanly separated into namespaces based on the predicted category.
 4. **Query Pipeline**: When a user asks a question, the backend first checks **Redis** for a cached answer. If missed, it embeds the question, queries Pinecone for the Top-5 most similar chunks, and streams those chunks + the question to **Groq**.
 5. **Streaming Response**: The LLM streams its answer back to the frontend via Server-Sent Events (SSE), alongside the exact source paragraphs.
@@ -89,7 +89,7 @@ Building this required connecting several distinct pieces of technology. Here is
 | **Backend API** | FastAPI (Python) | High performance, async support for streaming, and native typing validation. |
 | **Auth & DB** | Supabase (PostgreSQL) | Instant JWT authentication and robust relational storage for chat histories. |
 | **Text Processing** | LangChain & PyPDF2 | Essential tools for reliable document chunking and text extraction. |
-| **Embeddings** | HuggingFace (all-MiniLM-L6-v2) | 100% free, local embedding generation. No API costs. |
+| **Embeddings** | HuggingFace (BAAI/bge-small-en-v1.5) | 100% free serverless API embeddings. No huge PyTorch RAM footprint. |
 | **LLM Inference** | Groq (Llama 3.3 70B) | Lightning fast inference at 800+ tokens/sec, completely free. |
 | **Vector DB** | Pinecone | Serverless, highly scalable vector search separated by category namespaces. |
 | **Machine Learning** | scikit-learn (TF-IDF + NB) | Lightweight, fast document classification without LLM overhead. |
@@ -282,7 +282,7 @@ Deploying the React frontend to Vercel is incredibly simple:
 3. Import your `docuquery-ai` repository.
 4. Set the **Framework Preset** to `Vite`.
 5. Set the **Root Directory** to `frontend`.
-6. Add the environment variable: `VITE_API_URL` (pointing to your deployed backend URL).
+6. Add the environment variable: `VITE_API_URL` (pointing to your deployed backend URL. *Note: DO NOT include a trailing `/api`! Example:* `https://your-backend.onrender.com`).
 7. Click **Deploy**.
 
 ### Backend (Render / Railway)
@@ -292,8 +292,9 @@ To deploy the FastAPI backend:
 3. Set the **Root Directory** to `backend`.
 4. Set the **Build Command** to: `pip install -r requirements.txt`
 5. Set the **Start Command** to: `uvicorn app.main:app --host 0.0.0.0 --port 10000`
-6. Add all your `.env` variables from the backend (Supabase, Pinecone, Groq) to Render's Environment Variables section.
-7. Deploy!
+6. Add all your `.env` variables from the backend (Supabase, Pinecone, Groq, HF API) to Render's Environment Variables section.
+7. Go to **Settings -> Build & Deploy** and add a filter to ignore frontend changes: `Ignored Paths: frontend/**`
+8. Deploy!
 
 ---
 
