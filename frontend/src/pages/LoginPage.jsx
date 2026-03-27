@@ -156,7 +156,7 @@ export default function LoginPage() {
             Powered by LangChain, Pinecone, and AI
           </p>
           <p className="text-xs font-medium text-dark-400">
-            Made by Kushyanth C &copy; 2026
+            Made by Kushyanth B &copy; 2026
           </p>
         </div>
       </div>
