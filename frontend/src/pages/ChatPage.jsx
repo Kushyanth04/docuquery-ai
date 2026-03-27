@@ -8,7 +8,10 @@ export default function ChatPage() {
   const [messages, setMessages] = useState([])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
-  const [selectedDoc, setSelectedDoc] = useState(null)
+  const [selectedDoc, setSelectedDoc] = useState(() => {
+    const saved = localStorage.getItem('lastSelectedDoc')
+    return saved ? JSON.parse(saved) : null
+  })
   const messagesEndRef = useRef(null)
   const inputRef = useRef(null)
 
@@ -105,6 +108,8 @@ export default function ChatPage() {
 
   const handleSelectDocument = (doc) => {
     setSelectedDoc(doc)
+    if (doc) localStorage.setItem('lastSelectedDoc', JSON.stringify(doc))
+    else localStorage.removeItem('lastSelectedDoc')
   }
 
   const suggestedQuestions = [

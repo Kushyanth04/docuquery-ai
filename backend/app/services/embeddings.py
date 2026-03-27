@@ -14,7 +14,7 @@ _hf_model = None
 async def get_embeddings_huggingface(texts: List[str]) -> List[List[float]]:
     """Generate embeddings using HuggingFace Inference API (FREE).
 
-    Model: all-MiniLM-L6-v2
+    Model: BAAI/bge-small-en-v1.5 (natively supports feature extraction)
     Dimension: 384
     """
     import httpx
@@ -24,7 +24,7 @@ async def get_embeddings_huggingface(texts: List[str]) -> List[List[float]]:
     
     settings = get_settings()
     logger = logging.getLogger(__name__)
-    api_url = "https://router.huggingface.co/hf-inference/models/sentence-transformers/all-MiniLM-L6-v2"
+    api_url = "https://router.huggingface.co/hf-inference/models/BAAI/bge-small-en-v1.5"
     headers = {"Authorization": f"Bearer {settings.huggingface_api_key}"}
     
     async with httpx.AsyncClient() as client:
