@@ -20,10 +20,13 @@ async def generate_answer_groq(
     Model: llama-3.3-70b-versatile
     Free tier: 30 requests/minute, 14.4K requests/day
     """
-    from groq import Groq
+    from groq import AsyncGroq
+    import os
 
     settings = get_settings()
-    client = Groq(api_key=settings.groq_api_key)
+    # Fallback to env var if auth is empty
+    api_key = settings.groq_api_key or os.environ.get("GROQ_API_KEY")
+    client = AsyncGroq(api_key=api_key)
 
     context = "\n\n---\n\n".join([
         f"[Source: {chunk['source']}, Page: {chunk.get('page', 'N/A')}]\n{chunk['text']}"
@@ -48,20 +51,20 @@ async def generate_answer_groq(
 
     if stream:
         async def _stream():
-            response = client.chat.completions.create(
+            response = await client.chat.completions.create(
                 model="llama-3.3-70b-versatile",
                 messages=messages,
                 stream=True,
                 temperature=0.3,
                 max_tokens=1024,
             )
-            for chunk in response:
+            async for chunk in response:
                 delta = chunk.choices[0].delta
                 if delta.content:
                     yield delta.content
         return _stream()
     else:
-        response = client.chat.completions.create(
+        response = await client.chat.completions.create(
             model="llama-3.3-70b-versatile",
             messages=messages,
             temperature=0.3,
