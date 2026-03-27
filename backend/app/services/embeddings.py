@@ -24,7 +24,7 @@ async def get_embeddings_huggingface(texts: List[str]) -> List[List[float]]:
     
     settings = get_settings()
     logger = logging.getLogger(__name__)
-    api_url = "https://api-inference.huggingface.co/pipeline/feature-extraction/sentence-transformers/all-MiniLM-L6-v2"
+    api_url = "https://router.huggingface.co/hf-inference/models/sentence-transformers/all-MiniLM-L6-v2"
     headers = {"Authorization": f"Bearer {settings.huggingface_api_key}"}
     
     async with httpx.AsyncClient() as client:
