@@ -67,7 +67,7 @@ async def signup(request: SignupRequest):
         return AuthResponse(
             user=UserResponse(**result["user"]) if result["user"] else None,
             session=result["session"],
-            message="Account created successfully. Please check your email for verification.",
+            message="Account created successfully. You can now sign in!",
         )
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))

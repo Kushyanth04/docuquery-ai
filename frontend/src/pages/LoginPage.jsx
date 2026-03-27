@@ -24,7 +24,7 @@ export default function LoginPage() {
         navigate('/chat')
       } else {
         await signup(email, password)
-        setSuccess('Account created! Check your email for verification, then log in.')
+        setSuccess('Account created! You can now sign in.')
         setIsLogin(true)
       }
     } catch (err) {
@@ -60,7 +60,7 @@ export default function LoginPage() {
         </div>
 
         {/* Card */}
-        <div className="glass-card p-8 animate-slide-up">
+        <div className="glass-card sm:p-8 p-5 animate-slide-up">
           {/* Toggle */}
           <div className="flex bg-dark-800/50 rounded-xl p-1 mb-6">
             <button

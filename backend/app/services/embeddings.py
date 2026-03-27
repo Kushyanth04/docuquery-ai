@@ -7,28 +7,43 @@ import numpy as np
 from typing import List
 from app.config import get_settings
 
-# Lazy-loaded model instance
+# Lazy-loaded model instance (legacy local method, removed to save RAM)
 _hf_model = None
 
 
-def _get_hf_model():
-    """Lazy-load HuggingFace sentence-transformer model to avoid memory overhead."""
-    global _hf_model
-    if _hf_model is None:
-        from sentence_transformers import SentenceTransformer
-        _hf_model = SentenceTransformer("all-MiniLM-L6-v2")
-    return _hf_model
-
-
 async def get_embeddings_huggingface(texts: List[str]) -> List[List[float]]:
-    """Generate embeddings using HuggingFace sentence-transformers (FREE).
+    """Generate embeddings using HuggingFace Inference API (FREE).
 
     Model: all-MiniLM-L6-v2
     Dimension: 384
     """
-    model = _get_hf_model()
-    embeddings = model.encode(texts, show_progress_bar=False)
-    return embeddings.tolist()
+    import httpx
+    import asyncio
+    import logging
+    from app.config import get_settings
+    
+    settings = get_settings()
+    logger = logging.getLogger(__name__)
+    api_url = "https://api-inference.huggingface.co/pipeline/feature-extraction/sentence-transformers/all-MiniLM-L6-v2"
+    headers = {"Authorization": f"Bearer {settings.huggingface_api_key}"}
+    
+    async with httpx.AsyncClient() as client:
+        for attempt in range(3):
+            try:
+                response = await client.post(api_url, headers=headers, json={"inputs": texts}, timeout=30.0)
+                if response.status_code == 200:
+                    return response.json()
+                elif response.status_code == 503:
+                    # Model is loading on huggingface servers
+                    logger.warning("HuggingFace model loading, waiting 5s...")
+                    await asyncio.sleep(5)
+                    continue
+                else:
+                    raise Exception(f"HuggingFace API failed {response.status_code}: {response.text}")
+            except httpx.ReadTimeout:
+                logger.warning("HuggingFace API timeout, retrying...")
+                await asyncio.sleep(2)
+        raise Exception("Failed to get embeddings from HuggingFace API after retries.")
 
 
 async def get_embeddings_openai(texts: List[str]) -> List[List[float]]:
